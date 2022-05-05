@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./styles.css";
 import { IconPicker } from "react-fa-icon-picker";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -34,13 +36,22 @@ export default function App() {
     item.value = `This is a ${v}`;
     setArrObj([...arrObj, item]);
   };
+  const printSlide = () => {
+    const div = document.getElementById('editable-slide');
+    console.log(div);
+    html2canvas(div)
+    .then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'JPEG', 0, 0);
+      pdf.save('new.pdf');
+    });
+  };
   return (
     <div className="container">
-      <div className="topmaincontainer">
+      <div className="topmaincontainer" id="editable-slide">
       <div className="top-header">
-      <h3 className="heading" contenteditable="true">
-        Insert the Title here{" "}
-      </h3>
+      <input className="heading" placeholder="Insert the Title here"/>
       <IconPicker
         value="FaPlusCircle"
         onChange={(v) => {
@@ -66,12 +77,11 @@ export default function App() {
                         value={item.icon}
                         onChange={(v) => handleIcon(v, index)}
                       />
-                      <span
+                      <input
+                        className="iconTitle"
                         onChange={(e) => handleChange(e, index)}
-                        contenteditable="true"
-                      >
-                        {item.value}
-                      </span>
+                        value={item.value}
+                      />    
                     </div>
                   )}
                 </Draggable>
@@ -83,6 +93,7 @@ export default function App() {
       </DragDropContext>
       </div>
       </div>
+      <button onClick={printSlide}>Export as pdf</button>
     </div>
   );
 }

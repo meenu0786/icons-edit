@@ -35,3 +35,14 @@
   padding: 30px;
   background-color: #f6f6f6;
 }
+.heading{
+  font-size: 20px;
+  border: none;
+  text-align: center;
+  background-color: #80808000;
+}
+.iconTitle{
+  background-color: #80808000;
+  border:none;
+  text-align: center;
+}
